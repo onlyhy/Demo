@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5/CSS3书本翻页3D动画演示</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+</head>
+
+<body>
+  <div class="component">
+	<ul class="align">
+		<li>
+		<!-- 文档中插图的对象 -->
+		    <figure class='book'>
+        	<!-- Front封面 -->
+                <ul class='hardcover_front'>
+
+					<li>
+					<span>HTML5/CSS3</span>
+					
+					</li>
+
+					<li></li>
+				</ul>
+
+			<!-- Pages 书内容页面 共5页 -->
+				<ul class='page'>
+					<li></li>
+					<li>
+					<a class="btn" href="https://github.com/onlyhy">点我！</a>
+					</li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+
+			<!-- Back 书底 -->
+                <ul class='hardcover_back'>
+					<li></li>
+					<li></li>
+				</ul>
+
+			<!-- 书脊 -->
+				<ul class='book_spine'>
+			    <li></li>
+				<li></li>
+				</ul>
+
+			<!-- 旁注 -->
+			<!--"figcaption" 元素应该被置于 "figure" 元素的第一个或者最后一个位置   用于定义figure元素的标题-->
+				<figcaption>
+				<h1>这是书本翻页小demo</h1>
+				
+				<a class="ink" href="https://github.com/onlyhy">By onlyhy</a>
+				<p>翻书看看里面有啥吧！</p>
+				</figcaption>
+			</figure>
+		</li>
+	</ul>
+</div>
+
+</body>
+
+</html>
