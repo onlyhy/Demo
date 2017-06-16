@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type='text/javascript'src="digit.js"></script>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        canvas{
+            display: block;
+            margin: 10px auto;
+            border: 1px solid blanchedalmond;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="1200" height="650"></canvas>
+<script type="text/javascript" src="digit.js"></script>
+<script>
+var WINDOW_WIDTH = 1200;
+var WINDOW_HEIGHT = 650;
+var RADIUS = 8;
+var MARGIN_TOP = 60;
+var MARGIN_LEFT = 80;
+var FLASHTIME = 50;
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+var curTimeList = 0;
+var nextTimeList = 0;
+// 掉落小球对象数组
+var fallBallsList = [];
+window.onload = function(){
+    var timer = setInterval(function(){
+        render(context,MARGIN_LEFT,MARGIN_TOP,FLASHTIME);
+        updateFallBalls(RADIUS);
+        console.log(fallBallsList.length)
+    },FLASHTIME)
+
+
+};
+
+function Ball(){
+    //定义小球对象
+    Ball.prototype.x = 0; // 小球x坐标
+    Ball.prototype.y = 0; //  小球y坐标
+    Ball.prototype.r = 8; // 小球半径
+    Ball.prototype.color = 'blue';  // 小球颜色
+    Ball.prototype.vx = 0; // 小球x方向的速度
+    Ball.prototype.vy = 0; // 小球y方向的速度
+    Ball.prototype.g = 0;  //  小球的y方向的加速度
+    Ball.prototype.update = function(){ //  更新小球坐标以及小球的y方向的速度
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += this.g;
+    }
+}
+
+    function render(context,x0,y0,flashtime){
+        /* 本函数的作用:在画布上渲染小球
+         * context: 画布对象
+         * x0: 整个时间相对于画布左边缘的偏移
+         * y0: 整个时间相对于画布上边缘的偏移
+         * flashtime: 刷新时间
+         */
+        // 清空画布
+        context.clearRect(0,0,1200,650);
+        // 获取当前时间。并格式化。 如果是12:34:56  则输出[1,2,10,3,4,10,5,6]
+        curTimeList = getDigitNumList(getTimeStr());
+        // 获取下一次定时器运行时刻的时间，并格式化
+        nextTimeList = getDigitNumList(getTimeStr(FLASHTIME));
+        // 获取所有的小球对象的数组，包含表示时间的小球以及掉落小球。格式：[ball1,ball2,……,balln]
+        var allballsList = getBallsList(digit,x0,y0);
+        // 所有的小球对象数组，包含了表示时间的小球对象以及掉落小球对象
+
+        for (var i in allballsList){
+            context.beginPath();
+            context.arc(allballsList[i].x,allballsList[i].y,allballsList[i].r,0,2*Math.PI);
+            context.closePath();
+            context.fillStyle = allballsList[i].color;
+            context.fill();
+            allballsList[i].update()
+
+        }
+
+    }
+
+    function updateFallBalls(r){
+        // 更新掉落小球对象数组，也就是使那些掉落到画布下边缘的小球能反弹上去 并 使离开画布的小球对象从数组中被删除，
+        for(var n in fallBallsList){
+            if(fallBallsList[n].y >= WINDOW_HEIGHT -r){
+                fallBallsList[n].y = WINDOW_HEIGHT - r;
+                fallBallsList[n].vy = fallBallsList[n].vy * -0.8
+            }
+        }
+
+        var cnt = 0;
+        for (var i in fallBallsList){
+            if (fallBallsList[i].x + r > 0 && fallBallsList[i].x - r < WINDOW_WIDTH){
+                fallBallsList[cnt++] = fallBallsList[i];
+            }
+        }
+        fallBallsList.splice(cnt-1);
+
+    }
+
+    function getBallsList(digit,x0,y0){
+        //  本函数的作用： 返回所有小球对象组成的数组
+        if(curTimeList != nextTimeList){
+            for (var n in nextTimeList){
+                if(nextTimeList[n] != curTimeList[n]){
+                    // 更新掉落小球对象组成的数组
+                    fallBallsList = fallBallsList.concat(_GetOneDigitBallsList(digit[curTimeList[n]],n,x0,y0,RADIUS,true));
+
+                }
+            }
+        }
+        var ballsList = [];
+        // 生成表示时间的小球对象组成的数组
+        for(var i in curTimeList){
+            ballsList = ballsList.concat(_GetOneDigitBallsList(digit[curTimeList[i]],i,x0,y0,RADIUS));
+        }
+
+        return ballsList.concat(fallBallsList)
+    }
+
+
+
+    function _GetOneDigitBallsList(list,position,leftOffset,topOffset,r,choice){
+        /* 本函数的作用是：获取组成一个数字的小球对象数组。
+         * list: 数组digit的某一项
+         * position： 该数字在时间中的位置
+         * r: 小球的半径
+         * choice：若为true，则随机小球对象的颜色，速度以及加速度，也就是说，若为true生成的小球对象为掉落小球
+         * 当时间是21:43:65秒时，如果我们想要得到组成数字3的小球列表,
+         * 应该这样调用本函数：_GetOneDigitBallsList(digit[3],4,左偏移,右偏移,r)
+         *
+         */
+        var ballsList = [];
+        var x0 = 0;
+        var y0 = 0;
+        for(var i in list){
+            y0 = topOffset + i*2*(r+1)+r+1;
+            for (var j in list[i]){
+                if(list[i][j] == 1){
+                    if(position < 3){
+                        x0 = leftOffset + position * 14 * (r+1)+ (r+1) *position + r+1 +j * 18
+                    }else if(position < 6){
+                        x0 = leftOffset + (position -1) *14*(r+1)+(r+1)*position + 8* (r+1) +r +1 +j * 18
+                    }else {
+                        x0 = leftOffset + (position-2)*14*(r+1)+ (r+1)*position + 16*(r+1) + r +1 +j * 18
+                    }
+                    ballsList.push(getOneBall(x0,y0,r,choice))
+                }
+            }
+        }
+        return ballsList
+    }
+
+    function getOneBall(x,y,r,random){
+        /*
+         * 返回一个小球对象
+         * x: 小球圆心的x坐标
+         * y: 小球圆心的y坐标
+         * r: 小球的半径
+         * random: 是否随机小球的速度，颜色以及加速度
+         */
+        var ball = new Ball();
+        ball.x = x;
+        ball.y = y;
+        ball.r = r;
+        if(random){
+            ball.color = randomColor();
+            ball.vx = randomV();
+            ball.vy = randomV();
+            ball.g = 1.5 + Math.random();
+        }
+
+        return ball
+    }
+
+    function getDigitNumList(timeStr){
+        /* 返回当前时间字符所对应的digit项数组
+         * 字符0-9分别对应着 digit 数组中的0-9索引项，而字符 ‘:’ 则对应着digit[10]
+         */
+        var digitList = [];
+        for (var i in timeStr){
+            if (timeStr[i] == ':'){
+                var num = 10;
+            }else{
+                var num = parseInt(timeStr[i]);
+            }
+            digitList.push(num);
+        }
+        return digitList;
+    }
+
+    function getTimeStr(offset){
+        var time = new Date();
+        if(offset){
+            time = new Date(time.getTime()+offset)
+        }
+        var hours = time.getHours()>9?time.getHours():'0'+time.getHours();
+        var mins = time.getMinutes()>9?time.getMinutes():'0'+time.getMinutes();
+        var seconds = time.getSeconds()>9?time.getSeconds():'0'+time.getSeconds();
+        return hours + ':' + mins +':' + seconds;
+    }
+
+    function randomColor(){
+        var colorList = ["#33B5E5", "#0099CC", "#AA66CC", "#9933CC", "#99CC00", "#669900", "#FFBB33", "#FF8800", "#FF4444", "#CC0000"];
+        return colorList[Math.floor(Math.random()*colorList.length)]
+    }
+
+    function randomV(){
+        return Math.pow( -1 , Math.ceil( Math.random()*1000 ) ) * 4
+    }
+
+
+
+
+</script>
+</body>
+</html>
