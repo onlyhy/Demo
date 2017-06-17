@@ -4,13 +4,26 @@ body {
   margin: 0;
 }
 
+.icon {
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.icon-pause {
+  display: none;
+}
+
+.icon-volume {
+  cursor: default;
+}
+
 .visualizer {
   position: absolute;
   bottom: 0;
   z-index: -1;
 }
 
-.play-playlist {
+.doubanfm-playlist {
   width: 240px;
   height: 320px;
   position: absolute;
@@ -23,34 +36,34 @@ body {
   color: #7c7b82;
 }
 
-.play-playlist::-webkit-scrollbar {
+.doubanfm-playlist::-webkit-scrollbar {
   width: 6px;
   background: transparent;
 }
 
-.play-playlist:hover::-webkit-scrollbar-thumb {
+.doubanfm-playlist:hover::-webkit-scrollbar-thumb {
   background: hsla(0,0%,77%,.3);
   border-radius: 11px;
 }
 
-.play-playlist-item {
+.doubanfm-playlist-item {
   margin-bottom: 12px;
   cursor: pointer;
 }
 
-.play-playlist-item:last-child {
+.doubanfm-playlist-item:last-child {
   margin-bottom: 0;
 }
 
-.play-playlist-item:hover {
+.doubanfm-playlist-item:hover {
   color: #4a4a4a;
 }
 
-.play-playlist-item.active {
+.doubanfm-playlist-item.active {
   color: #000;
 }
 
-.play-cover {
+.doubanfm-cover {
   width: 240px;
   height: 240px;
   position: absolute;
@@ -62,12 +75,12 @@ body {
   overflow: hidden;
 }
 
-.play-cover img {
+.doubanfm-cover img {
   width: 100%;
   display: block;
 }
 
-.play-cover span {
+.doubanfm-cover span {
   visibility: hidden;
   width: 90px;
   height: 20px;
@@ -84,11 +97,11 @@ body {
   border-radius: 1px;
 }
 
-.play-cover:hover span {
+.doubanfm-cover:hover span {
   visibility: visible;
 }
 
-.play-player {
+.doubanfm-player {
   width: 430px;
   height: 180px;
   position: absolute;
@@ -98,73 +111,73 @@ body {
   margin-left: -215px;
 }
 
-.play-title {
+.doubanfm-title {
   font-size: 25px;
   color: rgb(3, 3, 3);
 }
 
-.play-artist {
+.doubanfm-artist {
   font-size: 15px;
   color: rgb(74, 74, 74);
   line-height: 2;
 }
 
-.play-operations {
+.doubanfm-operations {
   margin-top: 5px;
 }
 
-.play-time {
+.doubanfm-time {
   font-size: 11px;
   color: rgb(155, 155, 155);
   margin-right: 15px;
 }
 
-.play-progress {
+.doubanfm-progress {
   padding: 5px 0;
   cursor: pointer;
 }
 
-.play-progress-slider {
+.doubanfm-progress-slider {
   height: 1px;
   background-color: #dadada;
 }
 
-.play-progress-value {
+.doubanfm-progress-value {
   height: 100%;
   background-color: rgb(107, 189, 122);
 }
 
-.play-buttons {
+.doubanfm-buttons {
   float: right;
 }
 
-.play-controls {
+.doubanfm-controls {
   position: absolute;
   width: 100%;
   bottom: 0;
 }
 
-.play-controls .icon {
+.doubanfm-controls .icon {
   margin: 0 15px;
 }
 
-.play-controls .icon:first-child {
+.doubanfm-controls .icon:first-child {
   margin-left: 0;
 }
 
-.play-controls .icon:last-child {
+.doubanfm-controls .icon:last-child {
   margin-right: 0;
 }
 
-.play-controls .right {
+.doubanfm-controls .right {
   float: right;
 }
 
-.play-volume:hover .play-volume-slider {
+.doubanfm-volume:hover .doubanfm-volume-slider {
   display: inline-block;
 }
 
-.play-volume-slider {
+.doubanfm-volume-slider {
   display: none;
   vertical-align: middle;
   width: 50px;
@@ -173,7 +186,7 @@ body {
   cursor: pointer;
 }
 
-.play-volume-value {
+.doubanfm-volume-value {
   display: block;
   height: 100%;
   width: 100%;
