@@ -78,19 +78,19 @@ class DoubanFM {
     this.audio.src = this.song.url
     document.title = this.song.title
   }
-
+//播放
   play() {
     this.audio.play()
     this.$pause.style.display = 'inline-block'
     this.$play.style.display = 'none'
   }
-
+//暂停
   pause() {
     this.audio.pause()
     this.$play.style.display = 'inline-block'
     this.$pause.style.display = 'none'
   }
-
+//前一首
   prev() {
     if (this.playlistIndex == 0) {
       this.loadAndPlay(this.playlist.length - 1)
@@ -98,7 +98,7 @@ class DoubanFM {
       this.loadAndPlay(this.playlistIndex - 1)
     }
   }
-
+//后一首
   next() {
     if (this.playlistIndex == this.playlist.length - 1) {
       this.loadAndPlay(0)
